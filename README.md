@@ -58,6 +58,8 @@ BenchmarkSum/ParallelLocalVariable-32         	    5000	   3301371 ns/op
 BenchmarkSum/ParallelLocalVariable-56         	    5000	   2962546 ns/op
 ```
 
+<p align="center"><img src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQH4D2eONdwx-z3joRZyTQjcI_mtvMQ0OJds81MY27k4J5HAFjv257Zgf1EfoyQT6qd0HraIbRP-hF0/pubchart?oid=1182271586&format=image"></p>
+
 #### Go version and CPU
 ```
 $ go version
@@ -92,7 +94,72 @@ NUMA node1 CPU(s):     14-27,42-55
 Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb invpcid_single kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts
 ```
 
+## False Sharing detection
+Using linux perf `perf c2c`
+
+Setup max sample rate
+```bash 
+# echo 100000 > /proc/sys/kernel/perf_event_max_sample_rate
+```
+Record `BenchmarkSum/ParallelFalseSharing`
+```bash
+# perf c2c record -F 60000 -a --all-user go test -run=XXX -bench=BenchmarkSum/ParallelFalseSharing -cpu=4 -benchtime=5s
+# perf c2c report -NN --stdio
+
+=================================================
+            Trace Event Information              
+=================================================
+  Total records                     :     591181
+  Locked Load/Store Operations      :      56871
+  Load Operations                   :     260941
+  Loads - uncacheable               :          0
+  Loads - IO                        :          0
+  Loads - Miss                      :        452
+  Loads - no mapping                :        718
+  Load Fill Buffer Hit              :      65782
+  Load L1D hit                      :     188522
+  Load L2D hit                      :       1363
+  Load LLC hit                      :       2167
+  Load Local HITM                   :         43
+  Load Remote HITM                  :          0
+  Load Remote HIT                   :          0
+  Load Local DRAM                   :       1937
+  Load Remote DRAM                  :          0
+  Load MESI State Exclusive         :       1937
+  Load MESI State Shared            :          0
+  Load LLC Misses                   :       1937
+  LLC Misses to Local DRAM          :      100.0%
+  LLC Misses to Remote DRAM         :        0.0%
+  LLC Misses to Remote cache (HIT)  :        0.0%
+  LLC Misses to Remote cache (HITM) :        0.0%
+  Store Operations                  :     330240
+  Store - uncacheable               :          0
+  Store - no mapping                :        187
+  Store L1D Hit                     :     315973
+  Store L1D Miss                    :      14080
+  No Page Map Rejects               :        688
+  Unable to parse data source       :          0
+
+=================================================
+    Global Shared Cache Line Event Information   
+=================================================
+  Total Shared Cache Lines          :         35
+  Load HITs on shared lines         :      34424
+  Fill Buffer Hits on shared lines  :      10786
+  L1D hits on shared lines          :      23583
+  L2D hits on shared lines          :          2
+  LLC hits on shared lines          :         49
+  Locked Access on shared lines     :         63
+  Store HITs on shared lines        :      38356
+  Store L1D hits on shared lines    :      35934
+  Total Merged records              :      38399
+
+=================================================
+```
+
 ## Reference
 * https://software.intel.com/en-us/articles/avoiding-and-identifying-false-sharing-among-threads
 * https://scc.ustc.edu.cn/zlsc/sugon/intel/compiler_c/main_cls/cref_cls/common/cilk_false_sharing.htm
 * https://parallelcomputing2017.wordpress.com/2017/03/17/understanding-false-sharing/
+* https://lrita.github.io/images/posts/debug/moc.apr.2017.c2c.pdf
+* https://joemario.github.io/blog/2016/09/01/c2c-blog/
