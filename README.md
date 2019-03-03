@@ -21,11 +21,11 @@ BenchmarkSum/Linear-2          	                     100	 123964604 ns/op
 BenchmarkSum/Linear-4          	                     100	 112477528 ns/op
 BenchmarkSum/Linear-6          	                     100	 123335032 ns/op
 BenchmarkSum/Linear-8          	                     100	 123343898 ns/op
-BenchmarkSum/Linear-12          	                 100	 110501346 ns/op
-BenchmarkSum/Linear-16          	                 100	 120919665 ns/op
-BenchmarkSum/Linear-24          	                 100	 120565232 ns/op
-BenchmarkSum/Linear-32          	                 100	 116581446 ns/op
-BenchmarkSum/Linear-56          	                 100	 108527032 ns/op
+BenchmarkSum/Linear-12          	             100	 110501346 ns/op
+BenchmarkSum/Linear-16          	             100	 120919665 ns/op
+BenchmarkSum/Linear-24          	             100	 120565232 ns/op
+BenchmarkSum/Linear-32          	             100	 116581446 ns/op
+BenchmarkSum/Linear-56          	             100	 108527032 ns/op
 BenchmarkSum/ParallelFalseSharing            	     100	 231289258 ns/op
 BenchmarkSum/ParallelFalseSharing-2          	     100	 117786360 ns/op
 BenchmarkSum/ParallelFalseSharing-4          	     200	  64357195 ns/op
