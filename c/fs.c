@@ -238,14 +238,14 @@ int main(void)
 	int64_t* A = (int64_t*) malloc(N*sizeof(int64_t));
 	fill(A);
 
-	// double lineasOpNs = benchLinear(A);
-	// printf("benchLinear ns/op = %f\n", lineasOpNs);
+	 double lineasOpNs = benchLinear(A);
+	 printf("benchLinear ns/op = %f\n", lineasOpNs);
 
 	double sumParallelFalseSharingOpNs = benchSumParallelFalseSharing(A);
 	printf("sumParallelFalseSharing ns/op = %f\n", sumParallelFalseSharingOpNs);
 
-	// double sumParallelPaddedOpNs = benchSumParallelPadded(A);
-	// printf("sumParallelPadded ns/op = %f\n", sumParallelPaddedOpNs);
+	 double sumParallelPaddedOpNs = benchSumParallelPadded(A);
+	 printf("sumParallelPadded ns/op = %f\n", sumParallelPaddedOpNs);
 
 	return 0;
 }

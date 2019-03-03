@@ -1,4 +1,4 @@
-# False Sharing In Go
+# False Sharing with Go
 
 False sharing is a common problem in shared memory parallel processing. It occurs when two or more cores hold a copy of the same memory cache line.
 
