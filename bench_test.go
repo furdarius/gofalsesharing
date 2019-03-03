@@ -2,6 +2,7 @@ package gofalsesharing
 
 import (
 	"math"
+	"math/rand"
 	"runtime"
 	"testing"
 )
@@ -10,9 +11,9 @@ func in(magnitude int) []int {
 	size := int(math.Pow10(magnitude))
 
 	a := make([]int, size)
-	//for i := 0; i < size; i++ {
-	//	a[i] = rand.Int()
-	//}
+	for i := 0; i < size; i++ {
+		a[i] = rand.Int()
+	}
 
 	return a
 }
